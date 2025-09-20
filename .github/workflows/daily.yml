@@ -38,3 +38,14 @@ jobs:
         git add output/
         git commit -m "Daily FPL update $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
         git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
+
+    - name: Commit markdown report
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config --global user.name 'FPL Bot'
+        git config --global user.email 'bot@example.com'
+        git add docs/
+        git commit -m "Publish FPL report $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+        git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
+        # ✅ Push to main branch

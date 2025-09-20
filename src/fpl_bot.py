@@ -60,11 +60,35 @@ def save_report(text):
     with open(file_path, "w") as f:
         f.write(text)
 
+    file_path = os.path.join(output_dir, filename)
+    with open(file_path, "w") as f:
+        f.write("# FPL Daily Report\n\n")
+        f.write(text)
+
+    #Comments
+    print(f"✅ Markdown saved to: {file_path}")
     # 👀 Preview the report
     print("\n📄 File Preview:\n" + "-"*40)
     print(text)
     print("-"*40)
     print(f"\n✅ Report saved to: {file_path}")
+
+def save_markdown(text):
+    today = datetime.datetime.now().strftime("%Y-%m-%d")
+    timestamp = datetime.datetime.now().strftime("%H%M%S")
+    filename = f"fpl_report_{today}_{timestamp}.md"
+
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    output_dir = os.path.join(repo_root, "docs")  # ✅ GitHub Pages reads from /docs
+    os.makedirs(output_dir, exist_ok=True)
+
+    file_path = os.path.join(output_dir, filename)
+    with open(file_path, "w") as f:
+        f.write("# FPL Daily Report\n\n")
+        f.write(text)
+
+    print(f"✅ Markdown saved to: {file_path}")
+
 
 if __name__ == "__main__":
     try:
@@ -72,6 +96,7 @@ if __name__ == "__main__":
         team_map = get_team_name_map(teams)
         report = generate_report(players, team_map)
         save_report(report)
+        save_markdown(report)        
     except Exception as e:
         print(f"❌ Error: {e}")
         exit(1)
