@@ -16,7 +16,7 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}  # ✅ Use GitHub token for write access
+        persist-credentials: false  # ✅ Don't use default creds
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -30,9 +30,11 @@ jobs:
       run: python src/fpl_bot.py
 
     - name: Commit output
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --global user.name 'FPL Bot'
         git config --global user.email 'bot@example.com'
         git add output/
         git commit -m "Daily FPL update $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
-        git push
+        git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
