@@ -1,3 +1,0 @@
-# Example packages (uncomment when you need them)
-# requests
-# beautifulsoup4
