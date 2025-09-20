@@ -2,7 +2,7 @@ name: Daily FPL Bot
 
 on:
   schedule:
-    - cron: '0 9 * * *'  # Daily at 9 AM UTC
+    - cron: '10 4 * * *'  # Daily at 10:10 AM Bangladesh time
   workflow_dispatch:
 
 permissions:
