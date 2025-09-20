@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Daily FPL Bot</title>
 </head>
 <body>
   <h1>⚽️ Daily FPL Bot</h1>
