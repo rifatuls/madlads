@@ -1,0 +1,33 @@
+name: Daily FPL Bot
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Runs daily at 6 AM UTC
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install requests
+
+    - name: Run bot
+      run: python src/fpl_bot.py
+
+    - name: Commit output
+      run: |
+        git config --global user.name 'FPL Bot'
+        git config --global user.email 'bot@example.com'
+        git add output/
+        git commit -m "Daily FPL update"
+        git push
