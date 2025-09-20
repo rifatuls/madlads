@@ -17,9 +17,16 @@ def format_delta(n):
     abs_n = abs(n)
     return f"{symbol} {abs_n/1_000_000:.1f}m" if abs_n >= 1_000_000 else f"{symbol} {abs_n/1000:.1f}K"
 
+def generate_markdown_table(title, players):
+    lines = [f"## {title}", "", "| Player | Team | Price | Ownership | Δ Change |", "|--------|------|--------|-----------|----------|"]
+    for p in players:
+        delta = format_delta(p['ownership_change'])
+        lines.append(f"| {p['name']} | {p['team']} | £{p['price']} | {p['ownership_pct']:.1f}% | {delta} |")
+    lines.append("")
+    return "\n".join(lines)
+
 def generate_report(players, team_map):
     today = datetime.datetime.now().strftime("%Y-%m-%d")
-    lines = [f"FPL Daily Report | {today}\n"]
 
     enriched = []
     for p in players:
@@ -86,9 +93,7 @@ def save_markdown(text):
     with open(file_path, "w") as f:
         f.write("# FPL Daily Report\n\n")
         f.write(text)
-
     print(f"✅ Markdown saved to: {file_path}")
-
 
 if __name__ == "__main__":
     try:
