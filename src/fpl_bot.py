@@ -81,10 +81,19 @@ def save_markdown(text):
     with open(file_path, "w") as f:
         f.write(text)
 
-    # Update homepage
+    # ✅ Update homepage with latest report + links
     index_path = os.path.join(output_dir, "index.md")
     with open(index_path, "w") as f:
+        f.write(f"# FPL Bot Homepage\n\n")
+        f.write(f"## Latest Report ({today})\n\n")
         f.write(text)
+        f.write("\n---\n")
+        f.write("## Historical Reports\n\n")
+
+        # List all .md files except index.md
+        md_files = sorted([f for f in os.listdir(output_dir) if f.endswith(".md") and f != "index.md"], reverse=True)
+        for md in md_files:
+            f.write(f"- [{md}]({md})\n")
 
     print(f"✅ Markdown saved to: {file_path}")
 
