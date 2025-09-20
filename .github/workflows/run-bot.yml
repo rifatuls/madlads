@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4   # also update checkout to v4 (latest)
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -26,7 +26,7 @@ jobs:
         run: python bot.py
 
       - name: Upload output as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4   # ✅ new version
         with:
           name: bot-output
           path: output/
