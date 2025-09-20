@@ -28,6 +28,7 @@ jobs:
       run: |
         git config --global user.name 'FPL Bot'
         git config --global user.email 'bot@example.com'
+        git pull --rebase
         git add output/
-        git commit -m "Daily FPL update"
+        git diff --cached --quiet || git commit -m "Daily FPL update"
         git push
