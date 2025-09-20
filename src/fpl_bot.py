@@ -40,8 +40,14 @@ def generate_report(players, team_map):
 
 def save_report(text):
     today = datetime.datetime.now().strftime("%Y-%m-%d")
-    os.makedirs("output", exist_ok=True)  # ✅ ensures folder exists
-    with open(f"output/fpl_report_{today}.txt", "w") as f:
+    
+    # ✅ Ensure output folder exists
+    output_dir = "output"
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # ✅ Write the file safely
+    file_path = os.path.join(output_dir, f"fpl_report_{today}.txt")
+    with open(file_path, "w") as f:
         f.write(text)
 
 
