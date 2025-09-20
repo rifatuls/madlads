@@ -41,14 +41,13 @@ def generate_report(players, team_map):
 
 def save_report(text):
     today = datetime.datetime.now().strftime("%Y-%m-%d")
-
-    # ✅ Get absolute path to repo root
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     output_dir = os.path.join(repo_root, "output")
     os.makedirs(output_dir, exist_ok=True)
 
-    # ✅ Write file to output/
-    file_path = os.path.join(output_dir, f"fpl_report_{today}.txt")
+    # ✅ Always write a new file with timestamp to force commit
+    timestamp = datetime.datetime.now().strftime("%H%M%S")
+    file_path = os.path.join(output_dir, f"fpl_report_{today}_{timestamp}.txt")
     with open(file_path, "w") as f:
         f.write(text)
 
