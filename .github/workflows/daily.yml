@@ -2,8 +2,11 @@ name: Daily FPL Bot
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+    - cron: '0 6 * * *'  # Runs daily at 6 AM UTC
   workflow_dispatch:
+
+permissions:
+  contents: write  # ✅ Required to push commits
 
 jobs:
   run-bot:
@@ -31,4 +34,4 @@ jobs:
         git pull --rebase
         git add output/
         git commit -m "Daily FPL update $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
-        git push
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
