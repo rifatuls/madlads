@@ -2,21 +2,25 @@ name: Daily FPL Bot
 
 on:
   schedule:
-    - cron: '10 4 * * *'  # Daily at 10:10 AM Bangladesh time
+    # Price change at 8:15 AM BST (2:15 AM UTC)
+    - cron: '15 2 * * *'
+    # Riser/Faller at 11:00 PM BST (5:00 PM UTC)
+    - cron: '0 17 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write  # ✅ Required for pushing commits
 
 jobs:
-  run-bot:
+  price-change:
+    if: github.event.schedule == '15 2 * * *'
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
       with:
-        persist-credentials: false  # ✅ Don't use default creds
+        persist-credentials: false
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -26,7 +30,38 @@ jobs:
     - name: Install dependencies
       run: pip install requests
 
-    - name: Run bot
+    - name: Run price change script
+      run: python src/price_change.py
+
+    - name: Commit output
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config --global user.name 'FPL Bot'
+        git config --global user.email 'bot@example.com'
+        git add output/
+        git commit -m "Price change update $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+        git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
+
+  riser-faller:
+    if: github.event.schedule == '0 17 * * *'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install requests
+
+    - name: Run riser/faller script
       run: python src/fpl_bot.py
 
     - name: Commit output
@@ -36,5 +71,5 @@ jobs:
         git config --global user.name 'FPL Bot'
         git config --global user.email 'bot@example.com'
         git add output/
-        git commit -m "Daily FPL update $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+        git commit -m "Riser/Faller update $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
         git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main

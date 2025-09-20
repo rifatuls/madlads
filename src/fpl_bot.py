@@ -10,7 +10,7 @@ def fetch_fpl_data():
     return data['elements'], data['teams']
 
 def get_team_name_map(teams):
-    return {team['id']: team['name'] for team in teams}
+    return {team['id']: team['short_name'] for team in teams}
 
 def format_delta(n):
     symbol = "△" if n > 0 else "▽"
