@@ -42,7 +42,7 @@ def save_report(text):
     today = datetime.datetime.now().strftime("%Y-%m-%d")
     
     # ✅ Ensure output folder exists
-    output_dir = "output"
+    output_dir = "output/"
     os.makedirs(output_dir, exist_ok=True)
     
     # ✅ Write the file safely
