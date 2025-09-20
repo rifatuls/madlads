@@ -1,5 +1,6 @@
 import requests
 import datetime
+import os
 
 def fetch_fpl_data():
     url = "https://fantasy.premierleague.com/api/bootstrap-static/"
@@ -39,8 +40,10 @@ def generate_report(players, team_map):
 
 def save_report(text):
     today = datetime.datetime.now().strftime("%Y-%m-%d")
+    os.makedirs("output", exist_ok=True)  # ✅ ensures folder exists
     with open(f"output/fpl_report_{today}.txt", "w") as f:
         f.write(text)
+
 
 if __name__ == "__main__":
     players, teams = fetch_fpl_data()
