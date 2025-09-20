@@ -1,10 +1,11 @@
+import os
 import requests
 import datetime
-import os
 
 def fetch_fpl_data():
     url = "https://fantasy.premierleague.com/api/bootstrap-static/"
     response = requests.get(url)
+    response.raise_for_status()
     data = response.json()
     return data['elements'], data['teams']
 
@@ -51,9 +52,13 @@ def save_report(text):
     with open(file_path, "w") as f:
         f.write(text)
 
-
 if __name__ == "__main__":
-    players, teams = fetch_fpl_data()
-    team_map = get_team_name_map(teams)
-    report = generate_report(players, team_map)
-    save_report(report)
+    try:
+        players, teams = fetch_fpl_data()
+        team_map = get_team_name_map(teams)
+        report = generate_report(players, team_map)
+        save_report(report)
+        print("✅ Report generated successfully.")
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        exit(1)
