@@ -41,12 +41,14 @@ def generate_report(players, team_map):
                 'ownership_change': p['transfers_in_event'] - p['transfers_out_event']
             })
 
-    sorted_players = sorted(enriched, key=lambda x: x['ownership_change'], reverse=True)
-    top10 = sorted_players[:10]
-    bottom10 = sorted_players[-10:]
+    sorted_by_gain = sorted(enriched, key=lambda x: x['ownership_change'], reverse=True)
+    sorted_by_loss = sorted(enriched, key=lambda x: x['ownership_change'])
 
-    top_table = generate_markdown_table("Top 10 Ownership Gains", top10)
-    bottom_table = generate_markdown_table("Bottom 10 Ownership Losses", bottom10)
+    top20 = sorted_by_gain[:20]
+    bottom20 = sorted_by_loss[:20]
+
+    top_table = generate_markdown_table("Top 20 Ownership Gains", top20)
+    bottom_table = generate_markdown_table("Top 20 Ownership Losses", bottom20)
 
     lines = [f"# FPL Daily Report | {today}", "", top_table, bottom_table]
     return "\n".join(lines)
@@ -80,7 +82,7 @@ def save_markdown(text):
         f.write(text)
 
     print(f"✅ Markdown saved to: {file_path}")
-    return filename  # for linking
+    return filename
 
 def save_html(text):
     today = datetime.datetime.now().strftime("%Y-%m-%d")
@@ -114,7 +116,7 @@ def save_html(text):
         f.write(full_html)
 
     print(f"✅ HTML saved to: {file_path}")
-    return filename  # for linking
+    return filename
 
 def update_index_html(latest_filename):
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
